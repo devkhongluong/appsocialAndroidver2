@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+    <!-- Khung bong bóng tin nhắn -->
+    <path
+        android:fillColor="#000000"
+        android:pathData="M17,4H7C4.79,4 3,5.79 3,8V14C3,16.21 4.79,18 7,18H8V20.29C8,21.18 9.08,21.63 9.71,21L12.71,18H17C19.21,18 21,16.21 21,14V8C21,5.79 19.21,4 17,4ZM19,14C19,15.1 18.1,16 17,16H12.29L10,18.29V16H7C5.9,16 5,15.1 5,14V8C5,6.9 5.9,6 7,6H17C18.1,6 19,6.9 19,8V14Z" />
+
+    <!-- 3 dấu chấm (Dùng 3 path tròn) -->
+    <path
+        android:fillColor="#000000"
+        android:pathData="M8,12m-1,0a1,1 0,1 1,2 0a1,1 0,1 1,-2 0" />
+    <path
+        android:fillColor="#000000"
+        android:pathData="M12,12m-1,0a1,1 0,1 1,2 0a1,1 0,1 1,-2 0" />
+    <path
+        android:fillColor="#000000"
+        android:pathData="M16,12m-1,0a1,1 0,1 1,2 0a1,1 0,1 1,-2 0" />
+</vector>
