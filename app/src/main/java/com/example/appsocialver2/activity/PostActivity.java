@@ -526,23 +526,10 @@ public class PostActivity extends BaseSensorActivity {
             WindowManager.LayoutParams lp = getWindow().getAttributes();
             if (lux < 100) {
                 lp.screenBrightness = 0.9f; // Sáng thấp -> tăng sáng màn hình
-                if (txtLightWarning != null) {
-                    txtLightWarning.setVisibility(View.VISIBLE);
-                    txtLightWarning.setText("Ánh sáng yếu (" + lux + " lux)\nBạn hãy giữ chắc tay!");
-                    txtLightWarning.setTextColor(android.graphics.Color.parseColor("#FFEB3B")); // Vàng
-                }
             } else if (lux > 1000) {
                 lp.screenBrightness = 0.2f; // Sáng cao -> giảm sáng màn hình
-                if (txtLightWarning != null) {
-                    txtLightWarning.setVisibility(View.VISIBLE);
-                    txtLightWarning.setText("Chói quá (" + lux + " lux)\nGiảm độ sáng màn hình!");
-                    txtLightWarning.setTextColor(android.graphics.Color.parseColor("#FF5252")); // Đỏ
-                }
             } else {
                 lp.screenBrightness = WindowManager.LayoutParams.BRIGHTNESS_OVERRIDE_NONE;
-                if (txtLightWarning != null) {
-                    txtLightWarning.setVisibility(View.GONE);
-                }
             }
             getWindow().setAttributes(lp);
         }
