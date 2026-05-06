@@ -1,15 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F5F5F5">
+    android:background="@color/light_grey">
 
     <!-- Container chứa tất cả Fragment -->
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragmentContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/bottomNav" />
+        android:layout_above="@id/navDivider" />
 
     <!-- Privacy overlay (cảm biến gần) -->
     <View
@@ -21,15 +22,22 @@
         android:visibility="gone"
         android:elevation="10dp" />
 
+    <!-- 1dp đen line for bottom nav top border -->
+    <View
+        android:id="@+id/navDivider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_above="@id/bottomNav"
+        android:background="@color/black" />
+
     <!-- Bottom Navigation Bar dùng chung cho toàn bộ app -->
     <LinearLayout
         android:id="@+id/bottomNav"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
+        android:layout_height="64dp"
         android:layout_alignParentBottom="true"
         android:orientation="horizontal"
-        android:background="#FFFFFF"
-        android:elevation="8dp">
+        android:background="@color/white">
 
         <LinearLayout
             android:id="@+id/navHome"
@@ -41,15 +49,19 @@
 
             <ImageView
                 android:id="@+id/imgNavHome"
-                android:layout_width="22dp"
-                android:layout_height="22dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                app:tint="@color/black"
                 android:src="@drawable/home" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
                 android:text="Trang chủ"
-                android:textSize="12sp" />
+                android:textColor="@color/black"
+                android:textSize="10sp"
+                android:textStyle="bold" />
         </LinearLayout>
 
         <LinearLayout
@@ -62,15 +74,19 @@
 
             <ImageView
                 android:id="@+id/imgNavFriends"
-                android:layout_width="22dp"
-                android:layout_height="22dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                app:tint="@color/black"
                 android:src="@drawable/group" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
                 android:text="Bạn bè"
-                android:textSize="12sp" />
+                android:textColor="@color/black"
+                android:textSize="10sp"
+                android:textStyle="bold" />
         </LinearLayout>
 
         <LinearLayout
@@ -83,15 +99,19 @@
 
             <ImageView
                 android:id="@+id/imgNavCamera"
-                android:layout_width="22dp"
-                android:layout_height="22dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                app:tint="@color/black"
                 android:src="@drawable/camera" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
                 android:text="Camera"
-                android:textSize="12sp" />
+                android:textColor="@color/black"
+                android:textSize="10sp"
+                android:textStyle="bold" />
         </LinearLayout>
 
         <LinearLayout
@@ -102,17 +122,42 @@
             android:gravity="center"
             android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/imgNavChat"
-                android:layout_width="22dp"
-                android:layout_height="22dp"
-                android:src="@drawable/messenger" />
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/imgNavChat"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    app:tint="@color/black"
+                    android:src="@drawable/messenger" />
+
+                <TextView
+                    android:id="@+id/tvChatBadge"
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:layout_alignTop="@id/imgNavChat"
+                    android:layout_alignEnd="@id/imgNavChat"
+                    android:layout_marginTop="-4dp"
+                    android:layout_marginEnd="-4dp"
+                    android:background="@drawable/bg_badge"
+                    android:textColor="@color/white"
+                    android:textSize="10sp"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:text="1"
+                    android:visibility="gone" />
+            </RelativeLayout>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
                 android:text="Nhắn tin"
-                android:textSize="12sp" />
+                android:textColor="@color/black"
+                android:textSize="10sp"
+                android:textStyle="bold" />
         </LinearLayout>
 
         <LinearLayout
@@ -125,15 +170,19 @@
 
             <ImageView
                 android:id="@+id/imgNavProfile"
-                android:layout_width="22dp"
-                android:layout_height="22dp"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                app:tint="@color/black"
                 android:src="@drawable/user" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
                 android:text="Cá nhân"
-                android:textSize="12sp" />
+                android:textColor="@color/black"
+                android:textSize="10sp"
+                android:textStyle="bold" />
         </LinearLayout>
 
     </LinearLayout>

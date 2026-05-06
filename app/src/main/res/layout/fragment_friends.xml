@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@color/white"
     android:paddingLeft="16dp"
     android:paddingTop="16dp"
     android:paddingRight="16dp">
@@ -13,6 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
+        android:gravity="center_vertical"
         android:orientation="horizontal">
 
         <TextView
@@ -22,7 +24,8 @@
             android:layout_weight="1"
             android:paddingBottom="8dp"
             android:text="Bạn bè"
-            android:textSize="20sp"
+            android:textColor="@color/black"
+            android:textSize="28sp"
             android:textStyle="bold" />
 
         <Button
@@ -30,24 +33,26 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="5dp"
-            android:background="@drawable/bg_button"
+            android:background="@drawable/bg_button_primary"
             android:text="+ tìm bạn"
-            android:textSize="10sp"
+            android:textColor="@color/white"
+            android:textSize="12sp"
             app:backgroundTint="@null" />
     </LinearLayout>
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="2dp"
+        android:layout_height="1dp"
         android:layout_marginTop="10dp"
-        android:background="#D1D1D1" />
+        android:background="@color/black" />
 
     <TextView
         android:id="@+id/tvFriendRequests"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingTop="8dp"
+        android:paddingTop="12dp"
         android:text="Lời mời kết bạn"
+        android:textColor="@color/black"
         android:textStyle="bold" />
 
     <androidx.recyclerview.widget.RecyclerView
@@ -58,16 +63,17 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="2dp"
+        android:layout_height="1dp"
         android:layout_marginTop="10dp"
-        android:background="#D1D1D1" />
+        android:background="@color/black" />
 
     <TextView
         android:id="@+id/tvFriendList"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingTop="8dp"
+        android:paddingTop="12dp"
         android:text="Danh sách bạn bè"
+        android:textColor="@color/black"
         android:textStyle="bold" />
 
     <androidx.recyclerview.widget.RecyclerView

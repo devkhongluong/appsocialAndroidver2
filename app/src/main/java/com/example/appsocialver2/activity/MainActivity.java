@@ -2,6 +2,7 @@ package com.example.appsocialver2.activity;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -13,6 +14,9 @@ import com.example.appsocialver2.fragments.FriendsFragment;
 import com.example.appsocialver2.fragments.HomeFragment;
 import com.example.appsocialver2.fragments.PostFragment;
 import com.example.appsocialver2.fragments.ProfileFragment;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
 /**
  * MainActivity chỉ còn vai trò là HOST chứa Fragment.
@@ -22,6 +26,7 @@ import com.example.appsocialver2.fragments.ProfileFragment;
 public class MainActivity extends BaseSensorActivity {
 
     private View privacyOverlay;
+    private TextView tvChatBadge;
 
     // Chỉ số tab hiện tại để tránh swap fragment không cần thiết
     private int currentTabIndex = -1;
@@ -39,14 +44,37 @@ public class MainActivity extends BaseSensorActivity {
         setContentView(R.layout.activity_main);
 
         privacyOverlay = findViewById(R.id.privacyOverlay);
+        tvChatBadge = findViewById(R.id.tvChatBadge);
 
         // Cài đặt Bottom Navigation
         setupBottomNav();
+        
+        // Lắng nghe thông báo chat
+        listenChatBadge();
 
         // Mở HomeFragment mặc định khi khởi động
         if (savedInstanceState == null) {
             switchTab(TAB_HOME);
         }
+    }
+
+    private void listenChatBadge() {
+        if (FirebaseAuth.getInstance().getCurrentUser() == null) return;
+        String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        FirebaseFirestore.getInstance().collection("users")
+                .document(currentUserId)
+                .collection("recent_chats")
+                .whereEqualTo("hasUnread", true)
+                .addSnapshotListener((query, error) -> {
+                    if (error != null || query == null) return;
+                    int unreadCount = query.size();
+                    if (unreadCount > 0) {
+                        tvChatBadge.setVisibility(View.VISIBLE);
+                        tvChatBadge.setText(String.valueOf(unreadCount));
+                    } else {
+                        tvChatBadge.setVisibility(View.GONE);
+                    }
+                });
     }
 
     private void setupBottomNav() {

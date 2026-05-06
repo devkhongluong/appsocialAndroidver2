@@ -118,6 +118,27 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.PostViewHolder
                     .addOnSuccessListener(aVoid -> {
                         holder.edtQuickMessage.setText("");
                         Toast.makeText(context, "Đã gửi tin nhắn cho tác giả", Toast.LENGTH_SHORT).show();
+                        
+                        // Cập nhật Recent Chats
+                        db.collection("users").document(currentUserId).get().addOnSuccessListener(doc -> {
+                            String myName = doc.getString("tendn");
+                            String myAvatar = doc.getString("avatar");
+                            
+                            db.collection("users").document(receiverId).get().addOnSuccessListener(receiverDoc -> {
+                                String receiverName = receiverDoc.getString("tendn");
+                                String receiverAvatar = receiverDoc.getString("avatar");
+                                
+                                com.example.appsocialver2.Models.RecentChat myRecent = new com.example.appsocialver2.Models.RecentChat(
+                                    receiverId, receiverName, receiverAvatar, text, false
+                                );
+                                db.collection("users").document(currentUserId).collection("recent_chats").document(receiverId).set(myRecent);
+                                
+                                com.example.appsocialver2.Models.RecentChat receiverRecent = new com.example.appsocialver2.Models.RecentChat(
+                                    currentUserId, myName, myAvatar, text, true
+                                );
+                                db.collection("users").document(receiverId).collection("recent_chats").document(currentUserId).set(receiverRecent);
+                            });
+                        });
                     })
                     .addOnFailureListener(e -> {
                         Toast.makeText(context, "Lỗi khi gửi tin nhắn", Toast.LENGTH_SHORT).show();

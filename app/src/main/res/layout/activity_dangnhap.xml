@@ -5,12 +5,12 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     tools:context=".activity.MainActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@drawable/bg_button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,79 +21,89 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_margin="20dp"
-            android:background="@drawable/bg_bogoc"
             android:orientation="vertical"
             android:padding="20dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.704">
+            app:layout_constraintVertical_bias="0.5">
 
             <TextView
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_gravity="center"
-                android:background="@drawable/bg_bogoc"
+                android:background="@drawable/bg_button_primary"
                 android:gravity="center"
                 android:text="M"
-                android:textColor="@android:color/white"
-                android:textSize="20sp" />
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:textSize="24sp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="16dp"
                 android:text="Đăng nhập"
                 android:textColor="@color/black"
-                android:textSize="24sp"
+                android:textSize="28sp"
                 android:textStyle="bold" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginBottom="16dp"
+                android:layout_marginBottom="32dp"
                 android:text="Chia sẻ khoảnh khắc của bạn"
-                android:textColor="#777"
+                android:textColor="@color/grey"
                 android:textSize="14sp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Email"
+                android:textColor="@color/black"
                 android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/edtEmail"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_marginBottom="12dp"
-                android:background="@drawable/bg_boder"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="4dp"
+                android:background="@drawable/bg_input_field"
                 android:hint="Nhập email"
+                android:textColorHint="@color/grey"
+                android:textColor="@color/black"
                 android:padding="12dp" />
 
             <TextView
                 android:id="@+id/errorEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:text="TextView" />
+                android:layout_marginBottom="12dp"
+                android:textColor="#D32F2F"
+                android:visibility="gone"
+                android:text="Lỗi email" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Mật khẩu"
+                android:textColor="@color/black"
                 android:textStyle="bold" />
 
             <EditText
                 android:id="@+id/edtPass"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_marginBottom="16dp"
-                android:background="@drawable/bg_boder"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="4dp"
+                android:background="@drawable/bg_input_field"
                 android:hint="Nhập mật khẩu"
+                android:textColorHint="@color/grey"
+                android:textColor="@color/black"
                 android:inputType="textPassword"
                 android:padding="12dp" />
 
@@ -101,16 +111,19 @@
                 android:id="@+id/errorPass"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="5dp"
-                android:text="TextView" />
+                android:layout_marginBottom="24dp"
+                android:textColor="#D32F2F"
+                android:visibility="gone"
+                android:text="Lỗi mật khẩu" />
 
             <Button
                 android:id="@+id/btnDangNhap"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:background="@drawable/bg_button"
+                android:background="@drawable/bg_button_primary"
                 app:backgroundTint="@null"
                 android:text="Đăng nhập"
+                android:textStyle="bold"
                 android:textColor="@color/white" />
 
             <TextView
@@ -118,14 +131,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="16dp"
                 android:text="Quên mật khẩu?"
-                android:textColor="#3F51B5" />
+                android:textStyle="bold"
+                android:textColor="@color/black" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="24dp"
                 android:gravity="center"
                 android:orientation="horizontal">
 
@@ -133,30 +147,32 @@
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_weight="1"
-                    android:background="#CCC" />
+                    android:background="@color/black" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="  Hoặc  "
-                    android:textColor="#777" />
+                    android:textStyle="bold"
+                    android:textColor="@color/black" />
 
                 <View
                     android:layout_width="0dp"
                     android:layout_height="1dp"
                     android:layout_weight="1"
-                    android:background="#CCC" />
+                    android:background="@color/black" />
             </LinearLayout>
 
             <Button
                 android:id="@+id/btnDangKy"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
-                android:layout_marginTop="12dp"
-                android:background="@drawable/bg_button"
+                android:layout_marginTop="24dp"
+                android:background="@drawable/bg_button_secondary"
                 app:backgroundTint="@null"
                 android:text="Tạo tài khoản mới"
-                android:textColor="@color/white" />
+                android:textStyle="bold"
+                android:textColor="@color/black" />
 
         </LinearLayout>
 
