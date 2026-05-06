@@ -43,24 +43,7 @@ public class ListFriendsChatActivity extends AppCompatActivity {
     }
 
     private void setupBottomNav() {
-        findViewById(R.id.home).setOnClickListener(v -> {
-            startActivity(new Intent(this, MainActivity.class));
-            finish();
-        });
-        findViewById(R.id.friend).setOnClickListener(v -> {
-            startActivity(new Intent(this, BanBe.class));
-            finish();
-        });
-        findViewById(R.id.btnNavCamera).setOnClickListener(v -> {
-            startActivity(new Intent(this, PostActivity.class));
-            finish();
-        });
-        findViewById(R.id.btnNavChat).setOnClickListener(v -> {
-            // Already here
-        });
-        findViewById(R.id.btnNavProfile).setOnClickListener(v -> {
-             startActivity(new Intent(this, profile.class));
-        });
+        // Navigation đã chuyển sang MainActivity Fragment host — không còn dùng ở đây
     }
 
     private void loadFriends() {

@@ -1,9 +1,7 @@
 package com.example.appsocialver2.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
-import android.widget.LinearLayout;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -23,7 +21,6 @@ import java.util.List;
 public class BanBe extends AppCompatActivity {
     RecyclerView rcvRequest, listFriends;
     FirebaseFirestore db;
-    LinearLayout home, friend, camera, chat, my;
     Button btnSearch;
     List<User> requestList = new ArrayList<>();
     List<User> friendList = new ArrayList<>();
@@ -35,11 +32,6 @@ public class BanBe extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_banbe);
 
-        home = findViewById(R.id.home);
-        friend = findViewById(R.id.friend);
-        camera = findViewById(R.id.camera);
-        chat = findViewById(R.id.chat);
-        my = findViewById(R.id.my);
         rcvRequest = findViewById(R.id.rcvRequest);
         listFriends = findViewById(R.id.listFriends);
         db = FirebaseFirestore.getInstance();
@@ -57,24 +49,8 @@ public class BanBe extends AppCompatActivity {
         loadFriends();
 
         btnSearch.setOnClickListener(v -> {
-            Intent intent = new Intent(this, KetBan.class);
+            android.content.Intent intent = new android.content.Intent(this, KetBan.class);
             startActivity(intent);
-        });
-        home.setOnClickListener(v -> {
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
-        });
-        camera.setOnClickListener(v -> {
-            Intent intent = new Intent(this, PostActivity.class);
-            startActivity(intent);
-        });
-        chat.setOnClickListener(v -> {
-            Intent intent = new Intent(this, ListFriendsChatActivity.class);
-            startActivity(intent);
-        });
-        my.setOnClickListener(v -> {
-             Intent intent = new Intent(this, profile.class);
-             startActivity(intent);
         });
     }
     private void loadRequests() {

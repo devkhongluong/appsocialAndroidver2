@@ -218,22 +218,9 @@ public class PostActivity extends BaseSensorActivity {
                 .show();
     }
 
-    /** Bottom nav điều hướng giống MainActivity */
+    /** Bottom nav điều hướng — đã chuyển sang MainActivity Fragment host */
     private void setupNavigation() {
-        findViewById(R.id.home).setOnClickListener(v -> {
-            startActivity(new Intent(this, MainActivity.class));
-            finish();
-        });
-        findViewById(R.id.friend).setOnClickListener(v -> {
-            startActivity(new Intent(this, BanBe.class));
-            finish();
-        });
-        // btnNavCamera → trang hiện tại, không cần làm gì
-        findViewById(R.id.btnNavChat).setOnClickListener(v -> {
-            startActivity(new Intent(this, ListFriendsChatActivity.class));
-            finish();
-        });
-        // btnNavProfile: chưa implement
+        // Navigation này không còn dùng — PostActivity giữ lại dự phòng
     }
 
     // ── State: Camera Mode → Preview Mode ──────────────────────────────────
