@@ -56,6 +56,9 @@
         <activity
             android:name=".activity.SinglePostActivity"
             android:exported="false" />
+        <activity
+            android:name=".activity.MapPickerActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

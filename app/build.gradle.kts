@@ -66,5 +66,7 @@ dependencies {
     annotationProcessor ("com.github.bumptech.glide:compiler:4.16.0")
     // Thêm vào khối dependencies
     implementation("com.google.android.gms:play-services-location:21.2.0")
+    // Bản đồ OpenStreetMap
+    implementation("org.osmdroid:osmdroid-android:6.1.18")
 
 }
