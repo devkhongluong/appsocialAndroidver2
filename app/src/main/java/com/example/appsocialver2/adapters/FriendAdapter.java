@@ -54,6 +54,16 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.ViewHolder
         User user = list.get(position);
 
         holder.tvName.setText(user.tendn);
+
+        View.OnClickListener openProfile = v -> {
+            if (context instanceof com.example.appsocialver2.activity.MainActivity) {
+                ((com.example.appsocialver2.activity.MainActivity) context).showUserDetail(user.userId);
+            }
+        };
+        
+        holder.itemView.setOnClickListener(openProfile);
+        holder.imgAvatar.setOnClickListener(openProfile);
+
         // lấy ảnh từ firebase
         if (user.avatar != null && !user.avatar.isEmpty()) {
             Glide.with(context)

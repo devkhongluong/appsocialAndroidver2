@@ -48,10 +48,7 @@ public class BanBe extends AppCompatActivity {
         loadRequests();
         loadFriends();
 
-        btnSearch.setOnClickListener(v -> {
-            android.content.Intent intent = new android.content.Intent(this, KetBan.class);
-            startActivity(intent);
-        });
+
     }
     private void loadRequests() {
         String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
