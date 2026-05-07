@@ -67,8 +67,7 @@ public class profile extends BaseSensorActivity {
         currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         // Ánh xạ View
         initUI();
-        // Cài đặt thanh điều hướng ở dưới
-        setupNavigation();
+        // (Navigation được xử lý bởi MainActivity Fragment host)
         // Cài đặt RecyclerView (dạng lưới 3 cột)
         myPostList = new ArrayList<>();
         gridPostAdapter = new GridPostAdapter(myPostList, this);
@@ -195,12 +194,6 @@ public class profile extends BaseSensorActivity {
             }
         });
     }
-    // Cài đặt thanh điều hướng chuyển Activity
-    private void setupNavigation() {
-        findViewById(R.id.home).setOnClickListener(v -> startActivity(new Intent(this, MainActivity.class)));
-        findViewById(R.id.friend).setOnClickListener(v -> startActivity(new Intent(this, BanBe.class)));
-        findViewById(R.id.btnNavCamera).setOnClickListener(v -> startActivity(new Intent(this, PostActivity.class)));
-        findViewById(R.id.btnNavChat).setOnClickListener(v -> startActivity(new Intent(this, ListFriendsChatActivity.class)));
-
-    }
-}
+    // Cài đặt thanh điều hướng — đã chuyển sang MainActivity Fragment host
+    // private void setupNavigation() { ... }
+}

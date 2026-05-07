@@ -61,25 +61,8 @@ public class KetBan extends AppCompatActivity {
     }
 
     private void setupBottomNav() {
-        findViewById(R.id.home).setOnClickListener(v -> {
-            startActivity(new android.content.Intent(this, MainActivity.class));
-            finish();
-        });
-        findViewById(R.id.friend).setOnClickListener(v -> {
-            startActivity(new android.content.Intent(this, BanBe.class));
-            finish();
-        });
-        findViewById(R.id.camera).setOnClickListener(v -> {
-            startActivity(new android.content.Intent(this, PostActivity.class));
-            finish();
-        });
-        findViewById(R.id.chat).setOnClickListener(v -> {
-            startActivity(new android.content.Intent(this, ListFriendsChatActivity.class));
-            finish();
-        });
-        findViewById(R.id.my).setOnClickListener(v -> {
-             startActivity(new android.content.Intent(this, profile.class));
-        });
+        // Navigation đã chuyển sang MainActivity Fragment host.
+        // Nhấn nút Back để quay lại màn hình trước.
     }
 
     private void loadRelationsAndSearch(String keyword) {

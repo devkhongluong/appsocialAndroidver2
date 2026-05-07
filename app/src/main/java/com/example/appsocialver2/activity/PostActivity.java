@@ -6,7 +6,11 @@ import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorManager;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkCapabilities;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
@@ -214,22 +218,9 @@ public class PostActivity extends BaseSensorActivity {
                 .show();
     }
 
-    /** Bottom nav điều hướng giống MainActivity */
+    /** Bottom nav điều hướng — đã chuyển sang MainActivity Fragment host */
     private void setupNavigation() {
-        findViewById(R.id.home).setOnClickListener(v -> {
-            startActivity(new Intent(this, MainActivity.class));
-            finish();
-        });
-        findViewById(R.id.friend).setOnClickListener(v -> {
-            startActivity(new Intent(this, BanBe.class));
-            finish();
-        });
-        // btnNavCamera → trang hiện tại, không cần làm gì
-        findViewById(R.id.btnNavChat).setOnClickListener(v -> {
-            startActivity(new Intent(this, ListFriendsChatActivity.class));
-            finish();
-        });
-        // btnNavProfile: chưa implement
+        // Navigation này không còn dùng — PostActivity giữ lại dự phòng
     }
 
     // ── State: Camera Mode → Preview Mode ──────────────────────────────────
@@ -312,6 +303,25 @@ public class PostActivity extends BaseSensorActivity {
         }, ContextCompat.getMainExecutor(this));
     }
 
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        if (connectivityManager != null) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                android.net.Network network = connectivityManager.getActiveNetwork();
+                if (network == null) return false;
+                NetworkCapabilities capabilities = connectivityManager.getNetworkCapabilities(network);
+                return capabilities != null && 
+                       (capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) || 
+                        capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) || 
+                        capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET));
+            } else {
+                android.net.NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+                return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+            }
+        }
+        return false;
+    }
+
     private void takePhoto() {
         if (imageCapture == null) return;
         File photoFile = new File(getExternalCacheDir(), System.currentTimeMillis() + ".jpg");
@@ -322,6 +332,9 @@ public class PostActivity extends BaseSensorActivity {
                     public void onImageSaved(@NonNull ImageCapture.OutputFileResults r) {
                         isFromGallery = false;
                         showPreview(Uri.fromFile(photoFile));
+                        if (!isNetworkAvailable()) {
+                            Toast.makeText(PostActivity.this, "Không có kết nối internet!", Toast.LENGTH_LONG).show();
+                        }
                     }
                     @Override
                     public void onError(@NonNull ImageCaptureException e) {
@@ -485,34 +498,61 @@ public class PostActivity extends BaseSensorActivity {
         
         // Disable nút tránh double-tap
         btnPost.setEnabled(false);
-        btnPost.setText("Đang xử lý ảnh...");
+        btnPost.setText("Đang kiểm tra kết nối...");
         
-        // Xử lý nén và encode Base64 trên background thread để không block UI
+        // Kiểm tra mạng thực tế trên background thread trước khi xử lý ảnh
         executorService.execute(() -> {
-            String base64Image = encodeImageToBase64(finalImageUri);
+            boolean hasInternet = false;
+            try {
+                // Thử kết nối đến DNS của Google để kiểm tra internet thực sự
+                java.net.Socket socket = new java.net.Socket();
+                socket.connect(new java.net.InetSocketAddress("8.8.8.8", 53), 1500);
+                socket.close();
+                hasInternet = true;
+            } catch (Exception e) {
+                hasInternet = false;
+            }
+
+            final boolean isConnected = hasInternet;
             
             runOnUiThread(() -> {
-                if (base64Image == null) {
+                if (!isConnected) {
                     btnPost.setEnabled(true);
                     btnPost.setText("ĐĂNG NGAY");
-                    Toast.makeText(this, "Lỗi khi xử lý ảnh!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PostActivity.this, "Không có kết nối internet! Vui lòng kiểm tra lại.", Toast.LENGTH_LONG).show();
                     return;
                 }
                 
-                btnPost.setText("Đang đăng bài...");
+                btnPost.setText("Đang xử lý ảnh...");
                 
-                // Lưu Post với chuỗi Base64
-                Post newPost = new Post(null, uid, base64Image, desc, loc);
-                FirebaseFirestore.getInstance().collection("Posts").add(newPost)
-                    .addOnSuccessListener(ref -> {
-                        Toast.makeText(this, "Đã đăng bài thành công!", Toast.LENGTH_SHORT).show();
-                        resetToCapture();
-                    })
-                    .addOnFailureListener(e -> {
-                        btnPost.setEnabled(true);
-                        btnPost.setText("ĐĂNG NGAY");
-                        Toast.makeText(this, "Lỗi lưu bài: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                // Đã có mạng, tiến hành xử lý nén ảnh trên background thread
+                executorService.execute(() -> {
+                    String base64Image = encodeImageToBase64(finalImageUri);
+                    
+                    runOnUiThread(() -> {
+                        if (base64Image == null) {
+                            btnPost.setEnabled(true);
+                            btnPost.setText("ĐĂNG NGAY");
+                            Toast.makeText(PostActivity.this, "Lỗi khi xử lý ảnh!", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+                        
+                        btnPost.setText("Đang đăng bài...");
+                        
+                        // Lưu Post với chuỗi Base64
+                        Post newPost = new Post(null, uid, base64Image, desc, loc);
+                        FirebaseFirestore.getInstance().collection("Posts").add(newPost)
+                            .addOnSuccessListener(ref -> {
+                                Toast.makeText(PostActivity.this, "Đã đăng bài thành công!", Toast.LENGTH_SHORT).show();
+                                resetToCapture();
+                            })
+                            .addOnFailureListener(e -> {
+                                btnPost.setEnabled(true);
+                                btnPost.setText("ĐĂNG NGAY");
+                                Toast.makeText(PostActivity.this, "Lỗi lưu bài: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+                            });
                     });
+                });
             });
         });
     }

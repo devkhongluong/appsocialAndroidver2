@@ -1,49 +1,66 @@
-package com.example.appsocialver2.activity;
+package com.example.appsocialver2.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
-import androidx.appcompat.app.AppCompatActivity;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.appsocialver2.Models.RecentChat;
 import com.example.appsocialver2.R;
+import com.example.appsocialver2.activity.ChatActivity;
 import com.example.appsocialver2.adapters.FriendChatAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class ListFriendsChatActivity extends AppCompatActivity {
+/**
+ * Fragment màn hình danh sách bạn bè để nhắn tin.
+ * Thay thế ListFriendsChatActivity.
+ */
+public class ChatListFragment extends Fragment {
+
     private RecyclerView rvFriendsChat;
     private FirebaseFirestore db;
-    private List<RecentChat> chatList = new ArrayList<>();
+    private final List<RecentChat> chatList = new ArrayList<>();
     private FriendChatAdapter adapter;
 
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list_friends_chat);
+    public View onCreateView(@NonNull LayoutInflater inflater,
+                             @Nullable ViewGroup container,
+                             @Nullable Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_chat_list, container, false);
+    }
 
-        rvFriendsChat = findViewById(R.id.rvFriendsChat);
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
         db = FirebaseFirestore.getInstance();
+        rvFriendsChat = view.findViewById(R.id.rvFriendsChat);
+        rvFriendsChat.setLayoutManager(new LinearLayoutManager(requireContext()));
 
-        rvFriendsChat.setLayoutManager(new LinearLayoutManager(this));
+        // Click vào người bạn → mở ChatActivity (giữ Intent — màn hình detail)
         adapter = new FriendChatAdapter(chatList, chat -> {
-            Intent intent = new Intent(ListFriendsChatActivity.this, ChatActivity.class);
-            intent.putExtra("userId", chat.getFriendId());
-            intent.putExtra("userName", chat.getFriendName());
+            Intent intent = new Intent(requireContext(), ChatActivity.class);
+            intent.putExtra("userId",     chat.getFriendId());
+            intent.putExtra("userName",   chat.getFriendName());
             intent.putExtra("userAvatar", chat.getFriendAvatar());
             startActivity(intent);
         });
         rvFriendsChat.setAdapter(adapter);
 
-        setupBottomNav();
         loadChats();
-    }
-
-    private void setupBottomNav() {
-        // Navigation đã chuyển sang MainActivity Fragment host — không còn dùng ở đây
     }
 
     private void loadChats() {
@@ -60,7 +77,7 @@ public class ListFriendsChatActivity extends AppCompatActivity {
                             .collection("list")
                             .get()
                             .addOnSuccessListener(friendsQuery -> {
-                                if (isDestroyed() || isFinishing()) return;
+                                if (!isAdded()) return;
                                 
                                 List<RecentChat> tempChatList = new ArrayList<>();
                                 java.util.Set<String> recentFriendIds = new java.util.HashSet<>();
@@ -110,7 +127,7 @@ public class ListFriendsChatActivity extends AppCompatActivity {
 
     private void checkPendingAndSort(List<RecentChat> tempChatList, int[] pending) {
         pending[0]--;
-        if (pending[0] == 0 && !isDestroyed() && !isFinishing()) {
+        if (pending[0] == 0 && isAdded()) {
             updateUIWithSortedChats(tempChatList);
         }
     }

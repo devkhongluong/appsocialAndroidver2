@@ -54,6 +54,17 @@ public class ChatActivity extends BaseSensorActivity {
         initUi();
         setupChat();
         listenMessages();
+        markAsRead();
+    }
+
+    private void markAsRead() {
+        if (senderId != null && receiverId != null) {
+            db.collection("users").document(senderId).collection("recent_chats").document(receiverId)
+                .update("hasUnread", false)
+                .addOnFailureListener(e -> {
+                    // Document might not exist yet, ignore
+                });
+        }
     }
 
     private void initUi() {
@@ -89,8 +100,28 @@ public class ChatActivity extends BaseSensorActivity {
         Message message = new Message(messageId, senderId, receiverId, text);
         
         db.collection("chats").document(messageId).set(message)
-                .addOnSuccessListener(aVoid -> edtMessage.setText(""))
+                .addOnSuccessListener(aVoid -> {
+                    edtMessage.setText("");
+                    updateRecentChats(text);
+                })
                 .addOnFailureListener(e -> Toast.makeText(this, "Lỗi gửi tin nhắn", Toast.LENGTH_SHORT).show());
+    }
+
+    private void updateRecentChats(String text) {
+        db.collection("users").document(senderId).get().addOnSuccessListener(doc -> {
+            String myName = doc.getString("tendn");
+            String myAvatar = doc.getString("avatar");
+            
+            com.example.appsocialver2.Models.RecentChat myRecent = new com.example.appsocialver2.Models.RecentChat(
+                receiverId, receiverName, receiverAvatar, text, false
+            );
+            db.collection("users").document(senderId).collection("recent_chats").document(receiverId).set(myRecent);
+            
+            com.example.appsocialver2.Models.RecentChat receiverRecent = new com.example.appsocialver2.Models.RecentChat(
+                senderId, myName, myAvatar, text, true
+            );
+            db.collection("users").document(receiverId).collection("recent_chats").document(senderId).set(receiverRecent);
+        });
     }
 
     private void listenMessages() {
@@ -112,6 +143,11 @@ public class ChatActivity extends BaseSensorActivity {
                                     (msg.getSenderId().equals(receiverId) && msg.getReceiverId().equals(senderId))) {
                                     messageList.add(msg);
                                     changed = true;
+                                    
+                                    // Nếu đang mở khung chat và có tin nhắn mới từ người kia đến, đánh dấu đã đọc
+                                    if (msg.getSenderId().equals(receiverId)) {
+                                        markAsRead();
+                                    }
                                 }
                             } else if (dc.getType() == DocumentChange.Type.MODIFIED) {
                                 Message msg = dc.getDocument().toObject(Message.class);
