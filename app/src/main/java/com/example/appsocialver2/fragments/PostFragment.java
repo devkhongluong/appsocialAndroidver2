@@ -2,6 +2,7 @@ package com.example.appsocialver2.fragments;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -16,6 +17,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Base64;
 import android.util.Size;
+
+import com.example.appsocialver2.activity.MapPickerActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -116,6 +119,21 @@ public class PostFragment extends Fragment implements SensorEventListener {
                     if (isAdded())
                         Toast.makeText(requireContext(),
                                 "Cần quyền truy cập thư viện ảnh", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+    // Nhận kết quả tọa độ từ MapPickerActivity, dịch ngược sang địa chỉ văn bản
+    private final ActivityResultLauncher<Intent> mapPickerLauncher =
+            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
+                if (result.getResultCode() == android.app.Activity.RESULT_OK
+                        && result.getData() != null) {
+                    double lat = result.getData().getDoubleExtra("LAT", 0);
+                    double lng = result.getData().getDoubleExtra("LNG", 0);
+                    if (isAdded()) txtLocation.setText("Đang tải địa chỉ...");
+                    android.location.Location loc = new android.location.Location("");
+                    loc.setLatitude(lat);
+                    loc.setLongitude(lng);
+                    geocodeAddress(loc);
                 }
             });
 
@@ -276,7 +294,8 @@ public class PostFragment extends Fragment implements SensorEventListener {
         editDescription.setVisibility(View.VISIBLE);
         overlayHeader.setVisibility(View.VISIBLE);
         btnCancel.setVisibility(View.VISIBLE);
-        btnPickLocation.setVisibility(isFromGallery ? View.VISIBLE : View.GONE);
+        // Luôn hiện nút bản đồ cho cả ảnh chụp và ảnh thư viện
+        btnPickLocation.setVisibility(View.VISIBLE);
         fetchLocation();
     }
 
@@ -300,22 +319,9 @@ public class PostFragment extends Fragment implements SensorEventListener {
 
     // ── Location ─────────────────────────────────────────────────────────────
     private void pickLocationManually() {
-        android.widget.EditText input = new android.widget.EditText(requireContext());
-        input.setHint("Nhập địa chỉ của bạn...");
-        android.widget.FrameLayout container = new android.widget.FrameLayout(requireContext());
-        android.widget.FrameLayout.LayoutParams params = new android.widget.FrameLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.leftMargin = params.rightMargin = 50;
-        input.setLayoutParams(params);
-        container.addView(input);
-        new android.app.AlertDialog.Builder(requireContext())
-                .setTitle("Nhập vị trí thủ công")
-                .setView(container)
-                .setPositiveButton("Xác nhận", (d, w) -> {
-                    String loc = input.getText().toString().trim();
-                    if (!loc.isEmpty()) txtLocation.setText(loc);
-                })
-                .setNegativeButton("Hủy", null).show();
+        // Mở màn hình bản đồ OSMDroid để người dùng chọn vị trí trực quan
+        Intent intent = new Intent(requireContext(), MapPickerActivity.class);
+        mapPickerLauncher.launch(intent);
     }
 
     private void fetchLocation() {

@@ -33,9 +33,6 @@
         android:theme="@style/Theme.AppSocialver2">
 
         <activity
-            android:name=".activity.profile"
-            android:exported="false" />
-        <activity
             android:name=".utils.SplashActivity"
             android:exported="true">
             <intent-filter>
@@ -44,9 +41,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".activity.PostActivity"
-            android:exported="false" />
+
         <activity
             android:name=".activity.MainActivity"
             android:exported="false" />
@@ -54,12 +49,13 @@
             android:name=".activity.DangNhapActivity"
             android:exported="false" />
         <activity android:name=".activity.DangKi" />
-        <activity android:name=".activity.BanBe" />
-        <activity android:name=".activity.KetBan" />
         <activity android:name=".activity.ChatActivity" />
         <activity android:name=".activity.ListFriendsChatActivity" />
         <activity
             android:name=".activity.SinglePostActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activity.MapPickerActivity"
             android:exported="false" />
     </application>
 
