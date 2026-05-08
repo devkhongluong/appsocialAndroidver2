@@ -63,41 +63,44 @@ public class KetBanAdapter extends RecyclerView.Adapter<KetBanAdapter.ViewHolder
 
         holder.tvName.setText(user.tendn);
 
+        // Sự kiện Click vào Avatar hoặc Item để xem trang cá nhân
+        View.OnClickListener openProfile = v -> {
+            if (context instanceof com.example.appsocialver2.activity.MainActivity) {
+                ((com.example.appsocialver2.activity.MainActivity) context).showUserDetail(user.userId);
+            }
+        };
+
+        holder.itemView.setOnClickListener(openProfile);
+        holder.imgAvatar.setOnClickListener(openProfile);
+
         Glide.with(context)
                 .load(user.avatar != null && !user.avatar.isEmpty() ? user.avatar : R.drawable.account)
                 .placeholder(R.drawable.account)
                 .circleCrop()
                 .into(holder.imgAvatar);
 
-        // --- RESET VIEW (Quan trọng để tránh lỗi hiển thị sai khi scroll) ---
         holder.btnAdd.setVisibility(View.VISIBLE);
         holder.btnAdd.setEnabled(true);
         holder.btnAdd.setText("Kết bạn");
-        // Đặt màu mặc định (ví dụ màu xanh)
-
-
         if (user.userId.equals(currentUserId)) {
             holder.btnAdd.setVisibility(View.GONE);
             return;
         }
-
-        // 2. Kiểm tra nếu đã là bạn bè (So sánh ID chuỗi dài)
+        // Kiểm tra nếu đã là bạn bè (So sánh ID chuỗi dài)
         if (friendIds != null && friendIds.contains(user.userId)) {
             holder.btnAdd.setText("Bạn bè");
             holder.btnAdd.setEnabled(false);
 
             return;
         }
-
-        // 3. Kiểm tra nếu đã gửi lời mời (Đang chờ - Pending)
+        // Kiểm tra nếu đã gửi lời mời (Đang chờ - Pending)
         if (requestedIds != null && requestedIds.contains(user.userId)) {
             holder.btnAdd.setText("Đã gửi");
             holder.btnAdd.setEnabled(false);
-
             return;
         }
 
-        // 4. Mặc định: Có thể kết bạn
+        // Mặc định: Có thể kết bạn
         holder.btnAdd.setOnClickListener(v -> {
             guiLoiMoi(user, holder, position, currentUserId);
         });

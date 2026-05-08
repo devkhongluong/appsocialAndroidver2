@@ -57,6 +57,13 @@ public class RequestAdapter extends RecyclerView.Adapter<RequestAdapter.ViewHold
 
         User user = list.get(position);
         holder.tvName.setText(user.tendn);
+        View.OnClickListener openProfile = v -> {
+            if (context instanceof com.example.appsocialver2.activity.MainActivity) {
+                ((com.example.appsocialver2.activity.MainActivity) context).showUserDetail(user.userId);
+            }
+        };
+        holder.imgAvatar.setOnClickListener(openProfile);
+        holder.tvName.setOnClickListener(openProfile);
 
         String currentUserId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         if (user.avatar != null && !user.avatar.isEmpty()) {

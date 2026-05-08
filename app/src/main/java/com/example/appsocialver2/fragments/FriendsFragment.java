@@ -15,7 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.appsocialver2.Models.User;
 import com.example.appsocialver2.R;
-import com.example.appsocialver2.activity.KetBan;
 import com.example.appsocialver2.adapters.FriendAdapter;
 import com.example.appsocialver2.adapters.RequestAdapter;
 import com.google.firebase.auth.FirebaseAuth;
@@ -74,8 +73,9 @@ public class FriendsFragment extends Fragment {
         loadFriends();
 
         btnSearch.setOnClickListener(v -> {
-            Intent intent = new Intent(requireContext(), KetBan.class);
-            startActivity(intent);
+            if (getActivity() instanceof com.example.appsocialver2.activity.MainActivity) {
+                ((com.example.appsocialver2.activity.MainActivity) getActivity()).switchTabPublic(com.example.appsocialver2.activity.MainActivity.TAB_SEARCH);
+            }
         });
     }
 
